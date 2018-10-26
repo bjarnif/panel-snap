@@ -1,0 +1,109 @@
+@import '~styles/config';
+
+.section {
+  z-index: 2;
+
+  &__container {
+    @include container();
+    position: relative;
+  }
+
+  &__buttons {
+    position: absolute;
+    top: 150px;
+    bottom: 0;
+    right: $container-gutter-desktop;
+    z-index: 2;
+  }
+
+  &__buttonWrap {
+    position: sticky;
+    top: 150px;
+
+    @media (min-width: $min-tablet) {
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-end;
+      flex-direction: column;
+    }
+  }
+
+  &__button {
+    @include reset-button;
+
+    margin-bottom: $gutter;
+
+    cursor: pointer;
+
+    &.isActive {
+      color: #34c1fc;
+    }
+  }
+
+  &__row {
+    @include grid-row;
+  }
+
+  &__colLeft {
+    @include grid-col((100% / 12) * 5);
+  }
+
+  &__imageOffset {
+    @include heroImage($scale: true);
+    position: sticky;
+    top: 0;
+
+    height: 100vh;
+
+    overflow: hidden;
+  }
+
+  &__image {
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+  }
+
+  &__imageDiv {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    backface-visibility: hidden;
+  }
+
+  &__imageSource {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+  }
+
+  &__imageOverlayAnimation {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    z-index: 2;
+
+    background-color: #f3d345;
+
+    transform: translateY(-100%);
+  }
+
+  &__colRight {
+    @include grid-col((100% / 12) * 6);
+
+    margin-left: (100% / 12) * 1;
+  }
+
+  &__child {
+    position: relative;
+  }
+}

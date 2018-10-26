@@ -181,3 +181,48 @@
     }
   }
 }
+
+// Offseting hero image
+@mixin heroImage($direction: left, $heroOffset: 190px, $scale: false) {
+  @if $direction == right {
+    margin-right: -$gutter;
+
+    @media (min-width: $min-tablet) {
+      margin-right: -$container-gutter-tablet;
+    }
+
+    @media (min-width: $min-desktop) {
+      margin-right: -$container-gutter-desktop;
+    }
+
+    @media (min-width: $page-width + $heroOffset - 50px) {
+      margin-right: calc((100vw - #{$page-width}) / -2);
+    }
+
+    @if $scale == false {
+      @media (min-width: 1670px) {
+        margin-right: -$heroOffset;
+      }
+    }
+  } @else if $direction == left {
+    margin-left: -$gutter;
+
+    @media (min-width: $min-tablet) {
+      margin-left: -$container-gutter-tablet;
+    }
+
+    @media (min-width: $min-desktop) {
+      margin-left: -$container-gutter-desktop;
+    }
+
+    @media (min-width: $page-width + $heroOffset - 50px) {
+      margin-left: calc((100vw - #{$page-width}) / -2);
+    }
+
+    @if $scale == false {
+      @media (min-width: 1670px) {
+        margin-left: -$heroOffset;
+      }
+    }
+  }
+}
