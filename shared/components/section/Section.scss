@@ -34,6 +34,7 @@
     margin-bottom: $gutter;
 
     cursor: pointer;
+    transition: color $transition-enter ease-in-out;
 
     &.isActive {
       color: #34c1fc;
