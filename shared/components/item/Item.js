@@ -1,8 +1,13 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import Waypoint from 'react-waypoint';
+import Observer from 'react-intersection-observer';
+import classnames from 'classnames';
 
-import s from './Item.scss';
+import './Item.scss';
+
+if (typeof window !== 'undefined') {
+  require('intersection-observer');
+}
 
 export default class Item extends PureComponent {
 
@@ -14,18 +19,24 @@ export default class Item extends PureComponent {
     className: PropTypes.string,
   }
 
+  changeItem = (inView) => {
+    const { onChange } = this.props;
+
+    if (inView) {
+      onChange();
+    }
+  }
+
   render() {
-    const { title, description, id, onChange, className } = this.props;
+    const { title, description, id, className } = this.props;
 
     return (
-      <div className={s(s.item, className)} id={id}>
-        <div className={s.item__inner}>
-          <Waypoint
-            onEnter={onChange}
-            // scrollableAncestor={window !== undefined}
-          />
-          <h2 className={s.item__heading}>{title}</h2>
-          <p className={s.item__description}>{description}</p>
+      <div className={classnames('item', className)} id={id}>
+        <div className="item__inner">
+          <Observer tag="div" onChange={this.changeItem}>
+            <h2 className="item__heading">{title}</h2>
+            <p className="item__description">{description}</p>
+          </Observer>
         </div>
       </div>
     );

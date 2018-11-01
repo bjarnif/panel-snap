@@ -4,8 +4,9 @@ import TimelineLite from 'gsap/TimelineLite';
 import 'lib/ScrollToPlugin';
 
 import scrollToElement from 'utils/scroll-to-element';
+import classnames from 'classnames';
 
-import s from './Section.scss';
+import './Section.scss';
 
 export default class Section extends Component {
 
@@ -17,7 +18,7 @@ export default class Section extends Component {
     activeItem: undefined,
   }
 
-  image = [];
+  images = [];
   scrollUp = undefined;
   isScrolling = false;
   isAnimating = false;
@@ -28,7 +29,7 @@ export default class Section extends Component {
 
     t
       .set(
-        this.image[children[0].props.id],
+        this.images[children[0].props.id],
         { zIndex: 1 },
       );
 
@@ -43,10 +44,12 @@ export default class Section extends Component {
     window.removeEventListener('scroll', this.onScroll);
   }
 
+  // Find out scroll direction
   onMouseWheel = ({ deltaY }) => {
     this.scrollUp = deltaY < -0.01;
   }
 
+  // On scroll function handles item position
   onScroll = () => {
     const scrollTop = window.pageYOffset || window.scrollY;
 
@@ -58,23 +61,37 @@ export default class Section extends Component {
 
     this.scrollTimer = setTimeout(() => {
       this.distance = Math.abs(this.scrollStart - scrollTop);
-      this.moveChild();
+      this.moveItem();
       this.scrollStart = undefined;
     }, 500);
   }
 
-  moveChild() {
+  // Positioning the item text
+  moveItem() {
     const t = new TimelineLite();
-    const child = this.getChild();
+    const { section } = this;
+    const child = section.querySelector(`#${this.state.activeItem}`);
     const scrollTop = window.pageYOffset || window.scrollY;
 
+    // Not positioning if not active child or is scrolling
     if (!child || this.isScrolling) {
+      return;
+    }
+
+    // Not positioning first item until scrolled 1/3 of screen height
+    if (section.getBoundingClientRect().top > window.innerHeight / 3) {
+      return;
+    }
+
+    // Not positioning scrolled through last item
+    if (section.getBoundingClientRect().bottom < window.innerHeight) {
       return;
     }
 
     clearTimeout(this.scrollTimer);
     this.isScrolling = true;
 
+    // Positioning the item with scroll to plugin
     t
       .to(
         window,
@@ -88,38 +105,19 @@ export default class Section extends Component {
       });
   }
 
-  getChild() {
-    if (!this.section) return;
-
-    const revealPercentage = this.distance > 150 ? 0.5 : 0.025;
-    const childs = [].slice.call(this.section.querySelectorAll(`.${s.section__child}`));
-
-    return childs.map((child) => {
-      const top = child.getBoundingClientRect().top + window.innerHeight;
-      const bottom = window.innerHeight - child.getBoundingClientRect().top;
-
-      if (!this.scrollUp && bottom > window.innerHeight * revealPercentage
-        && bottom < window.innerHeight * (1 + revealPercentage)) {
-        return child;
-      } else if (this.scrollUp && top > window.innerHeight * revealPercentage
-        && top < window.innerHeight * (1.25 + revealPercentage)) {
-        return child;
-      }
-
-      return undefined;
-    }).filter(child => child !== undefined)[0];
-  }
-
+  // Sets active item and animates the right image in
   onItemChange = (id) => {
-    const t = new TimelineLite();
+    if (id === this.state.activeItem) return false;
 
     this.setState({ activeItem: id });
 
-    this.t = t;
+    const t = new TimelineLite();
     const { section } = this;
-    const activeImage = this.image[id];
-    const allImages = section.querySelectorAll(`.${s.section__imageDiv}`);
-    const imageOverlay = section.querySelector(`.${s.section__imageOverlayAnimation}`);
+    const activeImage = this.images[id];
+    const allImages = section.querySelectorAll('.section__image');
+    const imageOverlay = section.querySelector('.section__imageOverlayAnimation');
+
+    this.t = t;
 
     if (!this.isAnimating) {
       this.isAnimating = true;
@@ -166,10 +164,11 @@ export default class Section extends Component {
     }
   }
 
-  renderNavigation = item => (
+  // Render Buttons
+  renderNavigationItem = item => (
     <button
       key={`button-${item.props.id}`}
-      className={s(s.section__button,
+      className={classnames('section__button',
         { isActive: item.props.id === this.state.activeItem })
       }
       onClick={() => scrollToElement(`#${item.props.id}`)}
@@ -178,15 +177,16 @@ export default class Section extends Component {
     </button>
   );
 
+  // Render Images
   renderImages = item => (
     <div
       key={`image-${item.props.id}`}
-      ref={(c) => { this.image[item.props.id] = c; }}
-      className={s.section__imageDiv}
+      className="section__image"
+      ref={(c) => { this.images[item.props.id] = c; }}
     >
       <img
         src={item.props.image}
-        className={s.section__imageSource}
+        className="section__imageSource"
         alt=""
       />
     </div>
@@ -199,30 +199,35 @@ export default class Section extends Component {
 
     return (
       <section
+        className="section"
         ref={(c) => { this.section = c; }}
-        className={s.section}
       >
-        <section className={s.section__container}>
-          <div className={s.section__buttons}>
-            <div className={s.section__buttonWrap}>
-              {children.map(this.renderNavigation)}
+        <section className="section__container">
+
+          {/* Navigation */}
+          <div className="section__navigation">
+            <div className="section__buttons">
+              {children.map(this.renderNavigationItem)}
             </div>
           </div>
-          <div className={s.section__row}>
-            <div className={s.section__colLeft}>
-              <div
-                className={s.section__imageOffset}
-              >
-                <div className={s.section__image}>
-                  <div className={s.section__imageOverlayAnimation} />
+
+          <div className="section__row">
+            <div className="section__colLeft">
+
+              {/* Images */}
+              <div className="section__imageOffset">
+                <div className="section__images">
+                  <div className="section__imageOverlayAnimation" />
                   {children.map(this.renderImages)}
                 </div>
               </div>
+
             </div>
 
-            <div className={s.section__colRight}>
+            {/* Text content */}
+            <div className="section__colRight">
               {children.map(child => React.cloneElement(child, {
-                className: s.section__child,
+                className: 'section__child',
                 onChange: () => this.onItemChange(child.props.id),
               }))}
             </div>

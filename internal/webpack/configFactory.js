@@ -418,7 +418,7 @@ export default function webpackConfigFactory(buildOptions) {
               // Include sourcemaps for dev experience++.
               query: {
                 sourceMap: true,
-                modules: true,
+                modules: false,
                 importLoaders: 1,
                 localIdentName,
               },
@@ -505,7 +505,7 @@ export default function webpackConfigFactory(buildOptions) {
                     ...ExtractTextPlugin.extract({
                       fallback: 'style-loader',
                       use: [
-                        `css-loader?modules=1&importLoaders=1&localIdentName=${localIdentName}`,
+                        `css-loader?importLoaders=1&localIdentName=${localIdentName}`,
                         'postcss-loader',
                         'sass-loader?outputStyle=expanded',
                       ],

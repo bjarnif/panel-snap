@@ -20,19 +20,8 @@ import NotFound from './routes/not-found';
 export default function App() {
 
   return (
-    <AppLayout>
-      <Helmet {...config('helmet')} />
-
-      <Header>
-        <Navigation>
-          <Link to="/">Home</Link>
-          <Link to="/grid">Grid</Link>
-          <Link to="/planets">Planets</Link>
-          <Link to="/about">About</Link>
-        </Navigation>
-      </Header>
-
-      <Content>
+    <div>
+      <div>
         <Route component={Analytics} />
 
         <Switch>
@@ -42,9 +31,7 @@ export default function App() {
           <Route path="/planets" component={Planets} />
           <Route component={NotFound} />
         </Switch>
-      </Content>
-
-      <DevTools />
-    </AppLayout>
+      </div>
+    </div>
   );
 }
