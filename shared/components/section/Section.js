@@ -33,6 +33,9 @@ export default class Section extends Component {
         { zIndex: 1 },
       );
 
+    // Set first item active child on render
+    this.setState({ activeItem: children[0].props.id });
+
     window.addEventListener('mousewheel', this.onMouseWheel);
     window.addEventListener('scroll', this.onScroll);
   }
@@ -51,24 +54,15 @@ export default class Section extends Component {
 
   // On scroll function handles item position
   onScroll = () => {
-    const scrollTop = window.pageYOffset || window.scrollY;
-
     clearTimeout(this.scrollTimer);
 
-    if (this.scrollStart === undefined) {
-      this.scrollStart = scrollTop;
-    }
-
     this.scrollTimer = setTimeout(() => {
-      this.distance = Math.abs(this.scrollStart - scrollTop);
-      this.moveItem();
-      this.scrollStart = undefined;
+      this.positionItem();
     }, 500);
   }
 
-  // Positioning the item text
-  moveItem() {
-    const t = new TimelineLite();
+  // Positioning the item content
+  positionItem = () => {
     const { section } = this;
     const child = section.querySelector(`#${this.state.activeItem}`);
     const scrollTop = window.pageYOffset || window.scrollY;
@@ -83,7 +77,7 @@ export default class Section extends Component {
       return;
     }
 
-    // Not positioning scrolled through last item
+    // Not positioning when scrolled through last item
     if (section.getBoundingClientRect().bottom < window.innerHeight) {
       return;
     }
@@ -91,7 +85,9 @@ export default class Section extends Component {
     clearTimeout(this.scrollTimer);
     this.isScrolling = true;
 
-    // Positioning the item with scroll to plugin
+    const t = new TimelineLite();
+
+    // Positioning the item content with gsap scroll to plugin
     t
       .to(
         window,
@@ -125,7 +121,7 @@ export default class Section extends Component {
         .set(
           imageOverlay,
           {
-            backgroundColor: '#34c1fc',
+            backgroundColor: '#ab80ff',
             y: this.scrollUp ? '-100%' : '100%',
           },
         )

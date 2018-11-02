@@ -35,14 +35,14 @@
 
   &__description {
     @include responsive-font(15,18);
-    @include grid-col((100% / 12) * 8);
-
-    padding-left: 0;
-    padding-right: 0;
 
     margin-bottom: $gutter;
 
     @media (min-width: $min-tablet) and (min-height: 600px) {
+      @include grid-col((100% / 12) * 8);
+      padding-left: 0;
+      padding-right: 0;
+
       margin-bottom: 78px;
       margin-right: 200px;
     }

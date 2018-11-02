@@ -1,8 +1,6 @@
 @import '~styles/config';
 
 .section {
-  z-index: 2;
-
   &__container {
     @include container();
     position: relative;
@@ -39,12 +37,12 @@
     transition: color $transition-enter ease-in-out;
 
     &.isActive {
-      color: #34c1fc;
+      color: $color-primary;
     }
   }
 
   &__row {
-    @include grid-row($wrap: nowrap);
+    @include grid-row();
   }
 
   &__colLeft {
@@ -95,15 +93,18 @@
 
     z-index: 2;
 
-    background-color: #34c1fc;
+    background-color: $color-primary;
 
     transform: translateY(-100%);
   }
 
   &__colRight {
-    @include grid-col((100% / 12) * 6);
+    @include grid-col((100% / 12) * 7);
 
-    margin-left: (100% / 12) * 1;
+    @media (min-width: $min-tablet) {
+      @include grid-col((100% / 12) * 6);
+      margin-left: (100% / 12) * 1;
+    }
   }
 
   &__child {

@@ -26,7 +26,7 @@ export default class Home extends PureComponent {
             amet turpis porttitor, in gravida purus consectetur. Praesent
             viverra nisl nec lobortis facilisis. Nunc nibh mi, tincidunt
             id tempor vel, aliquam eu urna."
-            image={require('assets/images/rvk_2x.jpg')}
+            image={require('assets/images/5.png')}
           />
           <Item
             id="itemB"
@@ -35,7 +35,7 @@ export default class Home extends PureComponent {
             description="Sed non eleifend orci. Etiam ut quam vitae ligula
             sagittis sagittis. Duis ac metus at elit convallis lobortis.
             In hac habitasse platea dictumst. Praesent vel ligula leo."
-            image={require('assets/images/ny_2x.jpg')}
+            image={require('assets/images/12.png')}
           />
         </Section>
 

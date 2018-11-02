@@ -1,7 +1,11 @@
 @import '~styles/config';
 
 .space {
-  padding: 250px 0;
+  padding: 40vh 0;
+
+  @media (min-width: $min-tablet) {
+    padding: 250px 0;
+  }
 
   &__container {
     @include container;
