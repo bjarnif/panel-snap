@@ -66,6 +66,8 @@ export default class Section extends Component {
     const { section } = this;
     const child = section.querySelector(`#${this.state.activeItem}`);
     const scrollTop = window.pageYOffset || window.scrollY;
+    const { top, bottom } = section.getBoundingClientRect();
+    const threshold = window.innerHeight / 3;
 
     // Not positioning if not active child or is scrolling
     if (!child || this.isScrolling) {
@@ -73,12 +75,12 @@ export default class Section extends Component {
     }
 
     // Not positioning first item until scrolled 1/3 of screen height
-    if (section.getBoundingClientRect().top > window.innerHeight / 3) {
+    if (top > threshold) {
       return;
     }
 
     // Not positioning when scrolled through last item
-    if (section.getBoundingClientRect().bottom < window.innerHeight) {
+    if (bottom + threshold < window.innerHeight) {
       return;
     }
 
