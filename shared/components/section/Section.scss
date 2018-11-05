@@ -42,7 +42,7 @@
   }
 
   &__row {
-    @include grid-row();
+    @include grid-row;
   }
 
   &__colLeft {
@@ -84,14 +84,9 @@
   }
 
   &__imageOverlayAnimation {
-    position: absolute;
+    @include fit;
 
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-
-    z-index: 2;
+    z-index: 3;
 
     background-color: $color-primary;
 
@@ -105,9 +100,5 @@
       @include grid-col((100% / 12) * 6);
       margin-left: (100% / 12) * 1;
     }
-  }
-
-  &__child {
-    position: relative;
   }
 }

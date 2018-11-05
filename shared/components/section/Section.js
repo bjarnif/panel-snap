@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import TimelineLite from 'gsap/TimelineLite';
+import TweenLite from 'gsap/TweenLite';
 import 'lib/ScrollToPlugin';
 
-import scrollToElement from 'utils/scroll-to-element';
 import classnames from 'classnames';
 
 import './Section.scss';
@@ -15,7 +15,7 @@ export default class Section extends Component {
   };
 
   state = {
-    activeItem: undefined,
+    activeItem: this.props.children[0].props.id,
   }
 
   images = [];
@@ -24,17 +24,14 @@ export default class Section extends Component {
   isAnimating = false;
 
   componentDidMount() {
-    const { children } = this.props;
+    const { activeItem } = this.state;
     const t = new TimelineLite();
 
     t
       .set(
-        this.images[children[0].props.id],
+        this.images[activeItem],
         { zIndex: 1 },
       );
-
-    // Set first item active child on render
-    this.setState({ activeItem: children[0].props.id });
 
     window.addEventListener('mousewheel', this.onMouseWheel);
     window.addEventListener('scroll', this.onScroll);
@@ -115,15 +112,12 @@ export default class Section extends Component {
     const allImages = section.querySelectorAll('.section__image');
     const imageOverlay = section.querySelector('.section__imageOverlayAnimation');
 
-    this.t = t;
-
     if (!this.isAnimating) {
       this.isAnimating = true;
       t
         .set(
           imageOverlay,
           {
-            backgroundColor: '#ab80ff',
             y: this.scrollUp ? '-100%' : '100%',
           },
         )
@@ -162,6 +156,13 @@ export default class Section extends Component {
     }
   }
 
+  // Scroll to element used in navigation
+  scrollToElement = (id) => {
+    TweenLite.to(window, 1, {
+      ease: 'Power4.easeInOut', scrollTo: id,
+    });
+  };
+
   // Render Buttons
   renderNavigationItem = item => (
     <button
@@ -169,7 +170,7 @@ export default class Section extends Component {
       className={classnames('section__button',
         { isActive: item.props.id === this.state.activeItem })
       }
-      onClick={() => scrollToElement(`#${item.props.id}`)}
+      onClick={() => this.scrollToElement(`#${item.props.id}`)}
     >
       {item.props.title}
     </button>
@@ -225,7 +226,7 @@ export default class Section extends Component {
             {/* Text content */}
             <div className="section__colRight">
               {children.map(child => React.cloneElement(child, {
-                className: 'section__child',
+                key: child.props.id,
                 onChange: () => this.onItemChange(child.props.id),
               }))}
             </div>

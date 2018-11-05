@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Observer from 'react-intersection-observer';
-import classnames from 'classnames';
 
 import './Item.scss';
 
@@ -12,11 +11,10 @@ if (typeof window !== 'undefined') {
 export default class Item extends PureComponent {
 
   static propTypes = {
+    id: PropTypes.string,
     title: PropTypes.string,
     description: PropTypes.string,
-    id: PropTypes.string,
     onChange: PropTypes.func,
-    className: PropTypes.string,
   }
 
   changeItem = (inView) => {
@@ -28,10 +26,10 @@ export default class Item extends PureComponent {
   }
 
   render() {
-    const { title, description, id, className } = this.props;
+    const { title, description, id } = this.props;
 
     return (
-      <div className={classnames('item', className)} id={id}>
+      <div className="item" id={id}>
         <div className="item__inner">
           <Observer tag="div" onChange={this.changeItem}>
             <h2 className="item__heading">{title}</h2>
